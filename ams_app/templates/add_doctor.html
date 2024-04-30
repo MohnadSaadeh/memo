@@ -110,13 +110,17 @@
                                 {% if messages %}
                                 <ul class="messages">    
                                     {% for message in messages %}    
-                                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                                        {% if message.extra_tags == 'add_doctor' %}
+                                        <li class="message_success" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                                        {% else %} 
+                                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> 
+                                        {% endif %}   
                                     {% endfor %}
                                 </ul>
                                 {% else %}
-                                {% if messages.success %}
-                                    <p class="message_success" >You have successfully registered as Admin!  </p>
-                                {% endif %}
+                                    {% if messages.success %}
+                                        <p class="message_success" >You have successfully registered as Admin!  </p>
+                                    {% endif %}
                                 {% endif %}
                         <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                             <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg">add a Doctor</button>

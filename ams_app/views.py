@@ -113,8 +113,7 @@ def admin_register(request):
     errors = models.Admin.objects.basic_validator(request.POST)
     if len(errors) > 0:
         for key, value in errors.items():
-            messages.error(request, value , extra_tags = 'admin_registration' )
-            
+            messages.error(request, value)
         return redirect('/registr_admin')
     else:
         admin_first_name = request.POST['admin_first_name']
@@ -128,7 +127,7 @@ def admin_register(request):
         pw_hash_confirm = bcrypt.hashpw(admin_repete_password.encode(), bcrypt.gensalt()).decode()
         #hash------------
         models.create_admin(admin_first_name, admin_last_name, admin_email, admin_phone,  pw_hash, pw_hash_confirm) 
-        messages.success(request, "You have successfully registered as Admin!")
+        messages.success(request, "You have successfully registered as Admin!" , extra_tags='admin_registration' )
         return redirect('/registr_admin')
 
 
@@ -136,17 +135,23 @@ def admin_login(request):
     errors = models.Admin.objects.login_validator(request.POST)
     if len(errors) > 0:
         for key, value in errors.items():
-            messages.error(request, value)
+            # messages.error(request, value)
+            messages.error(request, value )
         return redirect('/login_admin')
     else:
         admin_email = request.POST['admin_email'] # here we get the email thet ENSERTED
         admin_password = request.POST['admin_password'] # here we get the password thet ENSERTED
-        admin = models.Admin.objects.get(email=admin_email) # here we get the admin by the email from DB
-        if bcrypt.checkpw(admin_password.encode(), admin.admin_password.encode()): # here we chick the password 
-            request.session['admin_id'] = admin.id
-            return redirect('/dashboard')
-        else:
-            messages.error(request, "Email or Password is incorrect")
+        admin = models.Admin.objects.filter(email=admin_email) # here we get the admin by the email from DB
+        if admin: # here we check if the admin exist
+            admin_user = admin[0] # here we get the admin from the list
+            if bcrypt.checkpw(admin_password.encode(), admin_user.admin_password.encode()): # here we chick the password 
+                request.session['admin_id'] = admin_user.id
+                return redirect('/dashboard')
+            else:
+                messages.error(request, "Incorrect Password")
+                # messages.error(request, value , extra_tags = 'admin_login' )
+                return redirect('/login_admin')
+        messages.error(request, "Email is incorrect")
         return redirect('/login_admin')
 
 
@@ -161,7 +166,7 @@ def add_clinic(request):
         clinic_specialty = request.POST['clinic_specialty']
         clinic_details = request.POST['clinic_details']
         clinic = models.create_a_clinic(clinic_name=clinic_name, clinic_specialty=clinic_specialty, clinic_details=clinic_details)
-        messages.success(request, "You have successfully added a clinic!")
+        messages.success(request, "You have successfully added a clinic!" , extra_tags = 'add_clinic')
         return redirect('/add_clinic_page')
 
 def add_doctor(request):
@@ -177,7 +182,7 @@ def add_doctor(request):
         doctor_phone = request.POST['doctor_phone_number']
         clinic_name = request.POST['clinic_name']
         doctor = models.create_a_doctor(doctor_first_name=doctor_first_name, doctor_last_name=doctor_last_name, doctor_specialty=doctor_specialty, doctor_phone=doctor_phone, clinic_name=clinic_name)
-        messages.success(request, "You have successfully added a doctor!")
+        messages.success(request, "You have successfully added a doctor!" , extra_tags = 'add_doctor')
         return redirect('/add_doctor_page')
 
 def add_pacient(request):

@@ -101,13 +101,13 @@
                                         />
                                     <div class="ms-3">
                                         <p class="fw-bold mb-1">{{pacient.patient_first_name}} {{pacient.patient_last_name}}</p>
-                                        <p class="text-muted mb-0">john.doe@gmail.com</p>
+                                        <p class="text-muted mb-0">{{pacient.patient_last_name}}</p>
                                     </div>
                                     </div>
                                 </td>
                                 <td>
                                     <p class="fw-normal mb-1"> {{pacient.patient_phone_number}} </p>
-                                    <p class="text-muted mb-0">IT department</p>
+                                    <p class="text-muted mb-0">ID: {{pacient.id}}</p>
                                 </td>
                                 <td>
                                     <span  > {{pacient.pacient_identity_number}} </span>
@@ -115,7 +115,7 @@
                                 <td>{{pacient.pacient_details}}</td>
                                 <td>
                                     <div class="btn-group shadow-0" role="group" role="group" aria-label="Basic example">
-                                        <a class="btn btn-danger" href="/add_clinic_page" data-mdb-ripple-init>Details </a><!--add doctor and a clinic you have to add at thr top-->
+                                        <!-- <a class="btn btn-danger" href="/add_clinic_page" data-mdb-ripple-init>Details </a>  -->
                                         <a class="btn btn-success" href="/appointment/{{pacient.id}}" data-mdb-ripple-init>Appointment</a> <!--add doctor and a clinic you have to add at thr top-->
                                     </div>
                                     
